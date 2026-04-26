@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Browser Usage Analyzer",
+  "version": "0.1.0",
+  "description": "Track your browsing time, set limits, and block distracting sites.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "alarms",
+    "idle",
+    "declarativeNetRequest"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "Browser Usage Analyzer"
+  },
+  "chrome_url_overrides": {
+    "newtab": "src/dashboard/index.html"
+  },
+  "options_page": "src/options/index.html"
+}
