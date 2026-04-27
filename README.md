@@ -112,7 +112,7 @@ The built extension lives in `dist/`. Load it in Chrome via `chrome://extensions
 | 1.5 | ✅ | Remove new tab override, add dashboard button to popup |
 | 2 | ✅ | Storage layer (CRUD for all data types) |
 | 3a | ✅ | Background service worker — alarm-based tab tracking |
-| 3b | ⬜ | Limit checking and warning notifications |
+| 3b | ✅ | Limit checking and block overlay |
 | 4 | ⬜ | Content script (visibility events + warning banners) |
 | 7 | ⬜ | Site blocking via `declarativeNetRequest` |
 | 8 | ⬜ | Options page (blocklist + limits UI) |

@@ -93,10 +93,18 @@ src/
 - `flush()` persists elapsed time to storage and resets the timer
 - Sleep gap protection: discards intervals >5s to avoid counting away time
 - On SW wake, queries current active tab to re-initialize tracking
+
+### [2026-04-26] Step 3b: Limit checking + block overlay
+- Added `checkLimits()` to background: checks effective limit (daily + bonus) on every tick
+- Track `blockedDomains` in memory to avoid re-sending block messages
+- Track warning thresholds per domain to avoid duplicate warnings
+- Content script creates a full-screen overlay with "+5 more minutes" button
+- Bonus time adds 5 min via `addBonusTime()`, re-checks on next tick
+- Content script is self-contained (no imports) to work around MV3 content script module restrictions
 - [x] Step 1.5: Remove new tab override, add dashboard open button to popup
 - [x] Step 2: Implement storage.js with full read/write API
 - [x] Step 3a: Background service worker — alarm-based tab tracking
-- [ ] Step 3b: Add limit checking + notifications
+- [x] Step 3b: Add limit checking + notifications
 - [ ] Step 4: Implement content.js visibility events
 - [ ] Step 7: Website blocking via declarativeNetRequest
 - [ ] Step 8: Options page (blocklist + limits)
