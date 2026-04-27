@@ -1,6 +1,6 @@
 # Browser Usage Analyzer
 
-A privacy-first Chrome extension (Manifest V3) that tracks active browsing time per site, enforces time limits with customizable warnings, blocks distracting sites, and shows a dashboard of your browsing habits.
+A privacy-first Chrome extension (Manifest V3) that tracks active browsing time per site, enforces time limits with customizable warnings, blocks distracting sites, and shows a dashboard of your browsing habits. test
 
 ## Purpose
 
