@@ -16,3 +16,20 @@ p {
   font-size: 14px;
   color: #555;
 }
+
+button {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #4338ca;
+}

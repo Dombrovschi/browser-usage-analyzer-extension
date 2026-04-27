@@ -60,7 +60,7 @@ src/
 | Browser | Chrome MV3 | Current standard, learning MV3 |
 | Build tool | Vite | Fast, simple, good for vanilla JS |
 | Framework | None (vanilla JS) | Learning project, no extra complexity |
-| Dashboard location | Chrome new tab override | Always visible, harder to ignore |
+| Dashboard location | Extension page (button in popup) | User didn't want new tab override |
 | Time limit reset | Daily at midnight | Clear daily budget |
 | Bonus time | Temporary (today only) | Doesn't permanently change limits |
 | Tracking granularity | ~2 second intervals | Balances accuracy vs storage writes |
@@ -76,11 +76,16 @@ src/
 - Wrote AGENTS.md and PROMPTING-GUIDE.md
 - Installed dependencies (`npm install`)
 
+### [2026-04-26] Step 1.5: Remove new tab override
+- Removed `chrome_url_overrides` from manifest (no more new tab takeover)
+- Added "Open Dashboard" button to popup that opens the dashboard in a new tab
+- Updated AGENTS.md to reflect decision change
+
 ## Planned Steps
 - [ ] Step 2: Implement storage.js with full read/write API
 - [ ] Step 3: Implement background.js tracker
 - [ ] Step 4: Implement content.js visibility events
-- [ ] Step 5: Build popup UI
+- [x] Step 1.5: Remove new tab override, add dashboard open button to popup
 - [ ] Step 6: Add limit checking + notifications
 - [ ] Step 7: Website blocking via declarativeNetRequest
 - [ ] Step 8: Options page (blocklist + limits)
