@@ -15,6 +15,12 @@ export class Tracker {
     this.sessionStart = null
   }
 
+  tick() {
+    const elapsed = this.getElapsed()
+    this.sessionStart = Date.now()
+    return elapsed
+  }
+
   getElapsed() {
     if (!this.sessionStart) return 0
     return Date.now() - this.sessionStart

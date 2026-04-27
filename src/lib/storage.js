@@ -1,13 +1,11 @@
+import { todayString } from './utils.js'
+
 export const STORAGE_KEYS = {
   DAILY_DATA: 'dailyData',
   SITE_LIMITS: 'siteLimits',
   BONUS_TIME: 'bonusTime',
   BLOCKED_SITES: 'blockedSites',
   SETTINGS: 'settings',
-}
-
-export function todayString() {
-  return new Date().toISOString().split('T')[0]
 }
 
 export async function getDailyData() {
@@ -23,6 +21,17 @@ export async function addTime(domain, ms) {
   if (!data[today]) data[today] = {}
   data[today][domain] = (data[today][domain] || 0) + ms
   await chrome.storage.local.set({ [key]: data })
+}
+
+export async function getDomainTime(domain) {
+  const today = todayString()
+  const [dailyData, bonusData] = await Promise.all([
+    getDailyData(),
+    getBonusTime(),
+  ])
+  const daily = dailyData[today]?.[domain] || 0
+  const bonus = bonusData[today]?.[domain] || 0
+  return daily + bonus
 }
 
 export async function getSiteLimits() {

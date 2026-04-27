@@ -81,12 +81,23 @@ src/
 - Added "Open Dashboard" button to popup that opens the dashboard in a new tab
 - Updated AGENTS.md to reflect decision change
 
-## Planned Steps
-- [ ] Step 2: Implement storage.js with full read/write API
-- [ ] Step 3: Implement background.js tracker
-- [ ] Step 4: Implement content.js visibility events
+### [2026-04-26] Step 2: Implement storage.js with full read/write API
+- Wrote complete CRUD wrapper for dailyData, siteLimits, bonusTime, blockedSites, settings
+- Removed duplicated `todayString()` (imported from `utils.js` instead)
+- Added `getDomainTime(domain)` helper that sums daily tracked time + bonus time
+
+### [2026-04-26] Step 3a: Background service worker — alarm-based tab tracking
+- Added `tick()` to Tracker class (returns elapsed + resets session timer)
+- Created `tracker-tick` alarm (~2s interval) on install
+- Listeners: `tabs.onActivated`, `tabs.onUpdated` (URL), `windows.onFocusChanged`
+- `flush()` persists elapsed time to storage and resets the timer
+- Sleep gap protection: discards intervals >5s to avoid counting away time
+- On SW wake, queries current active tab to re-initialize tracking
 - [x] Step 1.5: Remove new tab override, add dashboard open button to popup
-- [ ] Step 6: Add limit checking + notifications
+- [x] Step 2: Implement storage.js with full read/write API
+- [x] Step 3a: Background service worker — alarm-based tab tracking
+- [ ] Step 3b: Add limit checking + notifications
+- [ ] Step 4: Implement content.js visibility events
 - [ ] Step 7: Website blocking via declarativeNetRequest
 - [ ] Step 8: Options page (blocklist + limits)
 - [ ] Step 9: Full dashboard with Chart.js
