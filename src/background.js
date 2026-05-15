@@ -8,6 +8,7 @@ const MAX_SANE_ELAPSED = 5000
 const BONUS_MS = 300000
 
 let currentTabId = null
+let currentTabVisible = true
 const blockedDomains = new Set()
 const warnedThresholds = {}
 
@@ -24,8 +25,13 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 chrome.tabs.onActivated.addListener(async ({ tabId }) => {
   currentTabId = tabId
+  currentTabVisible = true
   const tab = await chrome.tabs.get(tabId)
   trackDomain(extractDomain(tab.url))
+  chrome.tabs.sendMessage(tabId, { type: 'GET_VISIBILITY' }, (response) => {
+    if (chrome.runtime.lastError) return
+    if (response) currentTabVisible = response.visible
+  })
 })
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -49,6 +55,24 @@ chrome.windows.onFocusChanged.addListener((windowId) => {
 })
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'VISIBILITY_CHANGE') {
+    const tabId = sender.tab?.id
+    if (tabId && tabId === currentTabId) {
+      currentTabVisible = message.visible
+      if (!message.visible) {
+        flush()
+        tracker.stop()
+      } else if (!tracker.getActiveDomain()) {
+        chrome.tabs.get(tabId, (tab) => {
+          if (tab && tab.id === currentTabId) {
+            trackDomain(extractDomain(tab.url))
+          }
+        })
+      }
+    }
+    return
+  }
+
   if (message.type === 'ADD_BONUS_TIME') {
     addBonusTime(message.domain, message.ms).then(() => {
       blockedDomains.delete(message.domain)
@@ -75,6 +99,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 })
 
 function flush() {
+  if (!currentTabVisible) return
   const domain = tracker.getActiveDomain()
   if (!domain) return
   const ms = tracker.tick()

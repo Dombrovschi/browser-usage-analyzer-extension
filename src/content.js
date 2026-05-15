@@ -133,7 +133,19 @@ function escapeHtml(str) {
   return div.innerHTML
 }
 
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.sendMessage({
+  type: 'VISIBILITY_CHANGE',
+  visible: !document.hidden,
+}).catch(() => {})
+
+document.addEventListener('visibilitychange', () => {
+  chrome.runtime.sendMessage({
+    type: 'VISIBILITY_CHANGE',
+    visible: !document.hidden,
+  }).catch(() => {})
+})
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   switch (message.type) {
     case 'SHOW_BLOCK':
       showBlockOverlay(message)
@@ -141,5 +153,8 @@ chrome.runtime.onMessage.addListener((message) => {
     case 'HIDE_BLOCK':
       hideBlockOverlay()
       break
+    case 'GET_VISIBILITY':
+      sendResponse({ visible: !document.hidden })
+      return true
   }
 })

@@ -101,6 +101,11 @@ src/
 - Content script creates a full-screen overlay with "+5 more minutes" button
 - Bonus time adds 5 min via `addBonusTime()`, re-checks on next tick
 - Content script is self-contained (no imports) to work around MV3 content script module restrictions
+- Added `SET_LIMIT` / `GET_LIMITS` message handlers in background for dev console usage
+- Fixed service worker import issue by adding `"type": "module"` to manifest background config
+- Fixed content script import issue by inlining `formatDuration()` (MV3 content scripts can't use ES module imports)
+
+## Planned Steps
 - [x] Step 1.5: Remove new tab override, add dashboard open button to popup
 - [x] Step 2: Implement storage.js with full read/write API
 - [x] Step 3a: Background service worker — alarm-based tab tracking
@@ -113,7 +118,8 @@ src/
 - [ ] Step 11: Polish, icons, edge cases
 
 ## Known Issues / Edge Cases
-- (none yet)
+- `chrome.runtime.sendMessage` from the service worker console does not reach the service worker's own `onMessage` listener — messages are only delivered to other extension contexts (popup, dashboard, content scripts). Use `chrome.storage.local` directly from the SW console for manual operations.
+- MV3 content scripts listed in manifest `content_scripts` cannot use ES module `import` — all dependencies must be inlined at build time or duplicated.
 
 ## Future Ideas
 - (to be added as we think of them)
