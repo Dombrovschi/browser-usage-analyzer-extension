@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Blocked</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #1a1a1a;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 40px 40px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    #domain-name {
+      font-size: 16px;
+      color: #4f46e5;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    p.text {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+    button {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 36px;
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover { background: #4338ca; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🚫</div>
+    <h1>Site Blocked</h1>
+    <div id="domain-name"></div>
+    <p class="text">This site has been blocked by Browser Usage Analyzer.</p>
+    <button id="go-back">Go Back</button>
+  </div>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

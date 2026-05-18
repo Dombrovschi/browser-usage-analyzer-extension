@@ -11,6 +11,7 @@ export default defineConfig({
         popup: resolve(__dirname, 'src/popup/index.html'),
         dashboard: resolve(__dirname, 'src/dashboard/index.html'),
         options: resolve(__dirname, 'src/options/index.html'),
+        blocked: resolve(__dirname, 'src/blocked/index.html'),
       },
       output: {
         entryFileNames: '[name].js',

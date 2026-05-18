@@ -1,11 +1,54 @@
 import { Tracker } from './lib/tracker.js'
-import { addTime, getDailyData, getBonusTime, getSiteLimits, setSiteLimit, addBonusTime } from './lib/storage.js'
+import { addTime, getDailyData, getBonusTime, getSiteLimits, setSiteLimit, addBonusTime, getBlockedSites } from './lib/storage.js'
 import { extractDomain } from './lib/utils.js'
 
 const tracker = new Tracker()
 const TICK_INTERVAL = 1 / 30
 const MAX_SANE_ELAPSED = 5000
 const BONUS_MS = 300000
+
+let syncingRules = false
+
+async function syncBlockRules() {
+  if (syncingRules) return
+  syncingRules = true
+  try {
+    const existingRules = await chrome.declarativeNetRequest.getDynamicRules()
+    const existingIds = existingRules.map(r => r.id)
+
+    const blockedSites = await getBlockedSites()
+    if (blockedSites.length === 0 && existingIds.length === 0) return
+
+    const extensionId = chrome.runtime.id
+    const newRules = blockedSites.map((domain, i) => {
+      const escapedDomain = domain.replace(/\./g, '\\.')
+      return {
+        id: 100 + i,
+        priority: 1,
+        action: {
+          type: 'redirect',
+          redirect: {
+            regexSubstitution: `chrome-extension://${extensionId}/src/blocked/index.html?domain=${domain}`,
+          },
+        },
+        condition: {
+          regexFilter: `^https?://((?:[^/?#]+\\.)*${escapedDomain})(?:/.*)?$`,
+          isUrlFilterCaseSensitive: false,
+          resourceTypes: ['main_frame'],
+        },
+      }
+    })
+
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: existingIds,
+      addRules: newRules,
+    })
+  } finally {
+    syncingRules = false
+  }
+}
+
+syncBlockRules()
 
 let currentTabId = null
 let currentTabVisible = true
@@ -14,6 +57,13 @@ const warnedThresholds = {}
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create('tracker-tick', { periodInMinutes: TICK_INTERVAL })
+  syncBlockRules()
+})
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.blockedSites) {
+    syncBlockRules()
+  }
 })
 
 chrome.alarms.onAlarm.addListener((alarm) => {

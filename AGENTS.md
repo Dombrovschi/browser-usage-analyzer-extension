@@ -105,12 +105,19 @@ src/
 - Fixed service worker import issue by adding `"type": "module"` to manifest background config
 - Fixed content script import issue by inlining `formatDuration()` (MV3 content scripts can't use ES module imports)
 
+### [2026-05-15] Step 4: Content script visibility tracking
+- Content script reports visibility state via `VISIBILITY_CHANGE` messages to background SW
+- Responds to `GET_VISIBILITY` queries from background SW
+- `flush()` guarded by `currentTabVisible` flag, defaults to `true` on activation
+- Flag corrected by content script response or visibility events
+- Defense-in-depth against missed focus/activation events
+
 ## Planned Steps
 - [x] Step 1.5: Remove new tab override, add dashboard open button to popup
 - [x] Step 2: Implement storage.js with full read/write API
 - [x] Step 3a: Background service worker — alarm-based tab tracking
 - [x] Step 3b: Add limit checking + notifications
-- [ ] Step 4: Implement content.js visibility events
+- [x] Step 4: Implement content.js visibility events
 - [ ] Step 7: Website blocking via declarativeNetRequest
 - [ ] Step 8: Options page (blocklist + limits)
 - [ ] Step 9: Full dashboard with Chart.js
